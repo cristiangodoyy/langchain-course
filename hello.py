@@ -35,8 +35,25 @@ def main():
     #llm = ChatOpenAI(temperature=0, model="gpt-5")
     
     llm = ChatOllama(temperature=0, model="gemma3:270m")
-    chain = summary_prompt_template | llm  # Runnables: https://reference.langchain.com/python/langchain_core/runnables/
     
+    """
+    What represent pipe | operator? | LCEL chaining syntax that connect components in a pipeline.
+    The pipe operator (I in LangChain is part of Lang Chain EXpression Language (LCEL) syntax. 
+    It creates a chain by connecting components in a pipeline where the output of the left component becomes the input of the right component. 
+    In this case, it connects the prompt template to the LLM, creating a runnable chain.
+    """
+    
+    chain = summary_prompt_template | llm  # Runnables: https://reference.langchain.com/python/langchain_core/runnables/. 
+    
+    
+    """
+    What happens when you call chain. invoke(input-/"information": informationt) ?
+    It executes the entire chain: formats the prompt with the input, then sends it to the LLM
+    Correct
+    Expjanation: The invokel method executes the entire LCEL chain. First, it passes the input dictionary to the Promptlamplate, 
+    which formats the template by substituting [information] with the provided value. Then, the formattad prompt is automatically 
+    passed to the ChatOpenAl LLM, which generates and returna the response.
+    """
     response = chain.invoke(input={"information": information})
     print(response.content)
     
